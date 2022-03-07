@@ -1,0 +1,132 @@
+{
+	"name": "ConditionalSplitDataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TargetSQLFactSalesDataset",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "MaxNoOfUnitsDataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "MinNoOfUnitDataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "EqualNoOfUnitsDataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SalesId as integer,",
+				"          Salesdate as integer,",
+				"          CustomerId as integer,",
+				"          EmployeeId as integer,",
+				"          storeId as integer,",
+				"          ProdID as integer,",
+				"          NoOfUnitId as integer,",
+				"          SaleAmt as decimal(19,4),",
+				"          salesReasonId as integer,",
+				"          ProductCost as decimal(19,4)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 split(NoOfUnitId > 300,",
+				"     NoOfUnitId < 300,",
+				"     disjoint: false) ~> split1@(maxNoOfUnits, MinNoOfUnits, EqualNoOfUnits)",
+				"split1@maxNoOfUnits sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SalesId as integer,",
+				"          Salesdate as integer,",
+				"          CustomerId as integer,",
+				"          EmployeeId as integer,",
+				"          StoreId as integer,",
+				"          ProdId as integer,",
+				"          NoOfUnitId as integer,",
+				"          SalesAmt as decimal(19,4),",
+				"          salesResonId as integer,",
+				"          ProductCost as decimal(19,4)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"split1@MinNoOfUnits sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SalesId as integer,",
+				"          Salesdate as integer,",
+				"          CustomerId as integer,",
+				"          EmployeeId as integer,",
+				"          StoreId as integer,",
+				"          ProdId as integer,",
+				"          NoOfUnitId as integer,",
+				"          SalesAmt as decimal(19,4),",
+				"          salesResonId as integer,",
+				"          ProductCost as decimal(19,4)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"split1@EqualNoOfUnits sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SalesId as integer,",
+				"          Salesdate as integer,",
+				"          CustomerId as integer,",
+				"          EmployeeId as integer,",
+				"          StoreId as integer,",
+				"          ProdId as integer,",
+				"          NoOfUnitId as integer,",
+				"          SalesAmt as decimal(19,4),",
+				"          salesResonId as integer,",
+				"          ProductCost as decimal(19,4)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3"
+			]
+		}
+	}
+}

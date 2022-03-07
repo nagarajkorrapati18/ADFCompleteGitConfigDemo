@@ -1,0 +1,70 @@
+{
+	"name": "EqualNoOfUnitsDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSQLLinkedServices",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SalesId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Salesdate",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustomerId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EmployeeId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StoreId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ProdId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NoOfUnitId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SalesAmt",
+				"type": "money",
+				"precision": 19,
+				"scale": 4
+			},
+			{
+				"name": "salesResonId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ProductCost",
+				"type": "money",
+				"precision": 19,
+				"scale": 4
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "equalproduct"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
